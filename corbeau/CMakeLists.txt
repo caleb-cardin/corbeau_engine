@@ -1,29 +1,34 @@
 add_library(CorbeauEngine STATIC
-        src/Corbeau.h
-        src/utility/Application.cpp
-        src/utility/Application.h
-        src/utility/Entry_point.h
-        src/utility/Window.cpp
-        src/utility/Window.h
-        platform/win/Window_win.cpp
-        platform/win/Window_win.h
-        src/utility/Assertion.h
-        src/render/Render_interface.h
-        src/render/Render_interface.cpp
-        driver/opengl/Render_impl_gl.h
-        driver/opengl/Render_impl_gl.cpp
-        src/render/Render.cpp
-        src/render/Render.h
-        src/render/Vertex_buffer.cpp
-        src/render/Vertex_buffer.h
-        src/memory/containers/Dynamic_array.cpp
-        src/memory/containers/Dynamic_array.h
-        src/memory/Memory.cpp
-        src/memory/Memory.h
-        src/memory/Allocator.cpp
-        src/memory/Allocator.h
-        src/utility/Logger.h
+        Corbeau.cppm
+        src/Application.cppm
+        src/utility/Assertion.cppm
+        src/utility/Logger.cppm
+        src/engine/threads/Threading.cppm
+        src/memory/Memory.cppm
+        src/render/Render.cppm
+        src/memory/Allocator.cppm
+        src/memory/Pointer.cppm
+        src/core/math/Math.cppm
+        src/core/math/Vector.cppm
+        src/core/math/Matrix.cppm
+        src/utility/Debug.cppm
 )
-target_link_libraries(CorbeauEngine PRIVATE glfw glad)
-target_include_directories(CorbeauEngine PUBLIC src platform driver ../lib/spdlog/include/)
+target_link_libraries(CorbeauEngine PRIVATE glfw)
+target_link_libraries(CorbeauEngine PRIVATE
+        C:/VulkanSDK/1.3.268.0/Lib/vulkan-1.lib)
+target_include_directories(CorbeauEngine PUBLIC src )
+target_include_directories(CorbeauEngine SYSTEM PUBLIC
+        ../lib/spdlog/include/
+        C:/VulkanSDK/1.3.268.0/Include)
+
 target_compile_features(CorbeauEngine PUBLIC cxx_std_20)
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    target_compile_definitions(CorbeauEngine PRIVATE -DDEBUG=1)
+    target_compile_definitions(CorbeauEngine PRIVATE -DCORBEAU_DEBUG_MODE=2)
+elseif (CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+    target_compile_definitions(CorbeauEngine PRIVATE -DCORBEAU_DEBUG_MODE=1)
+elseif (CMAKE_BUILD_TYPE MATCHES Release)
+target_compile_definitions(CorbeauEngine PRIVATE -DCORBEAU_DEBUG_MODE=0)
+else ()
+
+endif()
